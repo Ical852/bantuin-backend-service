@@ -6,6 +6,7 @@ use App\Helpers\ResponseFormatter;
 use App\Mail\AuthMail;
 use App\Mail\ResetMail;
 use App\Models\User;
+use App\Models\UserDevice;
 use App\Models\UserEmailToken;
 use Exception;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ class UserController extends Controller
     public function login(Request $request)
     {
         try {
-            $validator = Validator::make($request->all() ,[
+            $validator = Validator::make($request->all(), [
                 'email' => ['email', 'required'],
                 'password' => ['required']
             ]);
@@ -35,7 +36,7 @@ class UserController extends Controller
                 ], 'Authentication Failed', 500);
             }
 
-            $user = User::where('email', $request->email)->with(['helper'])->first();
+            $user = User::where('email', $request->email)->with(['helper', 'user_device'])->first();
             if (!Hash::check($request->password, $user->password)) {
                 throw new \Exception('Invalid Credentials');
             }
@@ -84,7 +85,7 @@ class UserController extends Controller
                 ], 'Register Failed', 500);
             }
 
-            User::create([
+            $user = User::create([
                 'full_name' => $request->full_name,
                 'username' => $request->username,
                 'phone_number' => $request->phone_number,
@@ -95,10 +96,9 @@ class UserController extends Controller
                 'balance' => 0
             ]);
 
-            $user = User::where('email', $request->email)->first();
-
             $user_email_token = [
                 'user_id' => $user->id,
+                'email' => $user->email,
                 'token_type' => 'emailverif',
                 'token' => base64_encode(random_bytes(64)),
             ];
@@ -125,13 +125,15 @@ class UserController extends Controller
         $user = User::firstWhere('id', Auth::user()->id);
         $user->update($data);
 
-        return ResponseFormatter::success($user->with(['helper'])->first(), 'Profile Updated');
+        $user = User::where('id', Auth::user()->id)->with(['helper', 'user_device'])->first();
+
+        return ResponseFormatter::success($user, 'Profile Updated');
     }
 
     public function changePassword(Request $request)
     {
         try {
-            $validator = Validator::make($request->all() ,[
+            $validator = Validator::make($request->all(), [
                 'password' => ['required'],
                 'new_password' => ['required', 'min:8'],
             ]);
@@ -140,7 +142,7 @@ class UserController extends Controller
                 return ResponseFormatter::error(null, $validator->errors());
             }
 
-            if(!Hash::check($request->password, Auth::user()->password)) {
+            if (!Hash::check($request->password, Auth::user()->password)) {
                 return ResponseFormatter::error([
                     'message' => 'Something Went Wrong',
                     'error' => 'Wrong Current Password'
@@ -165,9 +167,9 @@ class UserController extends Controller
     public function changeAvatar(Request $request)
     {
         try {
-           $validator = Validator::make($request->all(), [
-                'file' => ['required', 'image', 'max:2048']
-            ]);
+            $validator = Validator::make($request->all(), [
+                 'file' => ['required', 'image', 'max:2048']
+             ]);
 
             if ($validator->fails()) {
                 return ResponseFormatter::error(
@@ -190,8 +192,10 @@ class UserController extends Controller
                 $user->image = $file;
                 $user->update();
 
+                $user = User::where('id', Auth::user()->id)->with(['helper', 'user_device'])->first();
+
                 return ResponseFormatter::success([
-                    'user' => $user->with(['helper'])->first()
+                    'user' => $user
                 ], 'Change Avatar Success');
             }
         } catch (Exception $error) {
@@ -200,12 +204,11 @@ class UserController extends Controller
                 'error' => $error
             ], 'Change Avatar Failed', 500);
         }
-        
     }
 
     public function fetch(Request $request)
     {
-        $user = User::where('id', Auth::user()->id)->with(['helper'])->first();
+        $user = User::where('id', Auth::user()->id)->with(['helper', 'user_device'])->first();
         return ResponseFormatter::success($user, 'Success Get User Data');
     }
 
@@ -219,7 +222,7 @@ class UserController extends Controller
     public function resetPassword(Request $request)
     {
         try {
-            $validator = Validator::make($request->all() ,[
+            $validator = Validator::make($request->all(), [
                 'email' => ['required'],
             ]);
 
@@ -260,6 +263,136 @@ class UserController extends Controller
                 'message' => 'Something Went Wrong',
                 'error' => $error
             ], 'Request Reset Password Failed', 500);
+        }
+    }
+
+    public function storeUserDeviceId(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'user_id' => ['required'],
+                'device_id' => ['required'],
+                'email' => ['required'],
+            ]);
+
+            if ($validator->fails()) {
+                return ResponseFormatter::error(null, $validator->errors());
+            }
+
+            $user = User::where('id', $request->user_id)->first();
+
+            if (!$user) {
+                return ResponseFormatter::error([
+                    'message' => 'User Not Found',
+                ], 'Store User Device Id Failed', 500);
+            }
+
+            $userDevices = UserDevice::where('user_id', $request->user_id)->first();
+
+            if ($userDevices && $user->email_verified_at != null) {
+                return ResponseFormatter::error([
+                    'message' => 'Device Id Already Exist on This User',
+                ], 'Store User Device Id Failed', 500);
+            }
+
+            UserDevice::where('user_id', $request->user_id)->delete();
+
+            UserDevice::create([
+                'user_id' => $request->user_id,
+                'device_id' => $request->device_id,
+                'email' => $request->email,
+            ]);
+
+            $user = User::where('id', $request->user_id)->with(['helper', 'user_device'])->first();
+
+            return ResponseFormatter::success([
+                'user' => $user,
+            ], 'Store User Device Id Success');
+        } catch (Exception $error) {
+            return ResponseFormatter::error([
+                'message' => 'Something Went Wrong',
+                'error' => $error
+            ], 'Store User Device Id Failed', 500);
+        }
+    }
+
+    public function updateUserDeviceId(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'user_id' => ['required'],
+                'device_id' => ['required'],
+            ]);
+
+            if ($validator->fails()) {
+                return ResponseFormatter::error(null, $validator->errors());
+            }
+
+            $user = User::where('id', $request->user_id)->first();
+
+            if (!$user) {
+                return ResponseFormatter::error([
+                    'message' => 'User Not Found',
+                ], 'Update User Device Id Failed', 500);
+            }
+
+            $userDevices = UserDevice::where('user_id', $request->user_id)->first();
+
+            if (!$userDevices) {
+                return ResponseFormatter::error([
+                    'message' => 'User Doesn`t Have Any Device Yet',
+                ], 'Update User Device Id Failed', 500);
+            }
+
+            $userDevices->update([
+                'device_id' => $request->device_id
+            ]);
+
+            $user = User::where('id', $request->user_id)->with(['helper', 'user_device'])->first();
+
+            return ResponseFormatter::success([
+                'user' => $user,
+            ], 'Update User Device Id Success');
+        } catch (Exception $error) {
+            return ResponseFormatter::error([
+                'message' => 'Something Went Wrong',
+                'error' => $error
+            ], 'Update User Device Id Failed', 500);
+        }
+    }
+
+    public function fetchUserDeviceId(Request $request)
+    {
+        try {
+            $user_id = $request->user_id;
+
+            $user = User::where('id', $user_id)->first();
+
+            if (!$user) {
+                return ResponseFormatter::error([
+                    'message' => 'User Not Found',
+                ], 'Fetch User Device Data Failed', 500);
+            }
+
+            $userDevices = UserDevice::where('user_id', $user_id)->first();
+
+            if (!$userDevices) {
+                return ResponseFormatter::error([
+                    'message' => 'User Device Not Found',
+                    'device' => null
+                ], 'Fetch User Device Data Failed', 500);
+            }
+
+            $user = User::where('id', $user_id)->with(['helper', 'user_device'])->first();
+
+            return ResponseFormatter::success([
+                'user' => $user,
+            ], 'Fetch User Device Id Success');
+        } catch (Exception $error) {
+            return ResponseFormatter::error([
+                'message' => 'User Not Found',
+                'error' => $error
+            ], 'Fetch User Device Data Failed', 500);
         }
     }
 }

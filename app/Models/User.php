@@ -48,4 +48,14 @@ class User extends Authenticatable
     {
         return $this->hasOne(Helper::class);
     }
+
+    public function user_device()
+    {
+        return $this->hasOne(UserDevice::class, 'user_id', 'id');
+    }
+
+    public function bantuan()
+    {
+        return $this->hasMany(Bantuan::class);
+    }
 }

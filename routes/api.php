@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HelperController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -21,8 +22,19 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('user/avatar', [UserController::class, 'changeAvatar']);
     Route::post('user/logout', [UserController::class, 'logout']);
     Route::post('user/changepw', [UserController::class, 'changePassword']);
+
+    Route::post('helper', [HelperController::class, 'cuanRequest']);
+    Route::get('helper', [HelperController::class, 'fetch']);
+    Route::get('helper/check', [HelperController::class, 'checkAvailibility']);
+    Route::post('helper/update', [HelperController::class, 'update']);
+    Route::post('helper/rate', [HelperController::class, 'rateHelper']);
+    Route::get('helper/rate', [HelperController::class, 'getAllRate']);
 });
 
-Route::post('/user/login', [UserController::class, 'login']);
-Route::post('/user/register', [UserController::class, 'register']);
-Route::post('/user/resetpw', [UserController::class, 'resetPassword']);
+Route::post('device', [UserController::class, 'storeUserDeviceId']);
+Route::get('device', [UserController::class, 'fetchUserDeviceId']);
+Route::post('device/update', [UserController::class, 'updateUserDeviceId']);
+
+Route::post('user/login', [UserController::class, 'login']);
+Route::post('user/register', [UserController::class, 'register']);
+Route::post('user/resetpw', [UserController::class, 'resetPassword']);

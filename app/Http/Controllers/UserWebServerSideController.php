@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\UserDevice;
 use App\Models\UserEmailToken;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -51,8 +52,23 @@ class UserWebServerSideController extends Controller
 
             $user->where('email', $user->email)->whereNull('email_verified_at')->delete();
 
-            UserEmailToken::where('user_id', $user_id)
+            UserEmailToken::where('email', $user->email)
             ->where('token_type', $token_type)->delete();
+
+            UserDevice::where('user_id', '!=', $user->id)->where('email', $user->email)->delete();
+
+            $userDevices = UserDevice::where('user_id', $user_id)->first();
+
+            $pushData = [
+                'title' => 'Yeay Berhasil Verifikasi',
+                'body' => 'Akun Kamu Telah Terverifikasi, Sekarang Kamu Bisa Menggunakan Aplikasi',
+                'icon' => '',
+                'url' => 'url',
+                'device' => $userDevices->device_id
+            ];
+
+            $push = new PushNotificationController();
+            $push->sendVerifiedNotif($pushData);
 
             return $this->verifSuccess();
         } else {
@@ -125,5 +141,10 @@ class UserWebServerSideController extends Controller
         } else {
             return $this->resetFailed();
         }
+    }
+
+    public function testmail()
+    {
+        return view('');
     }
 }

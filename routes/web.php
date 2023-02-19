@@ -16,15 +16,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/verification', [UserWebServerSideController::class, 'verification']);
-Route::get('/resetpw', [UserWebServerSideController::class, 'resetPassword']);
-Route::post('/change', [UserWebServerSideController::class, 'submitNewPassword']);
-Route::get('/error404', [UserWebServerSideController::class, 'error404']);
+Route::get('verification', [UserWebServerSideController::class, 'verification']);
+Route::get('resetpw', [UserWebServerSideController::class, 'resetPassword']);
+Route::post('change', [UserWebServerSideController::class, 'submitNewPassword']);
+Route::get('error404', [UserWebServerSideController::class, 'error404']);
 
-Route::get('/auth', [CMSAuthController::class, 'index'])->name('login')->middleware('guest');
-Route::post('/login', [CMSAuthController::class, 'login']);
-Route::post('/logout', [CMSAuthController::class, 'logout']);
+Route::get('auth', [CMSAuthController::class, 'index'])->name('login')->middleware('guest');
+Route::post('login', [CMSAuthController::class, 'login']);
+Route::post('logout', [CMSAuthController::class, 'logout']);
 
-Route::get('/cms', [CMSController::class, 'index']);
-Route::get('/cms/helper', [CMSController::class, 'index']);
-Route::get('/cms/bantuan', [CMSController::class, 'index']);
+Route::get('cms', [CMSController::class, 'index']);
+Route::get('cms/helper', [CMSController::class, 'helper']);
+Route::get('cms/bantuan', [CMSController::class, 'bantuin']);
+Route::post('cms/helper/accept', [CMSController::class, 'accept']);
+Route::post('cms/helper/activate', [CMSController::class, 'activate']);
+Route::post('cms/helper/deny', [CMSController::class, 'deny']);
+Route::post('cms/helper/stop', [CMSController::class, 'stop']);
+
+Route::get('test', [UserWebServerSideController::class, 'testmail']);

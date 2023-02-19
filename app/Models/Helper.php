@@ -13,6 +13,11 @@ class Helper extends Model
 
     public function user()
     {
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class);
+    }
+
+    public function helper_rating()
+    {
+        return $this->hasMany(HelperRating::class);
     }
 }
