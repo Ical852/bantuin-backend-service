@@ -7,6 +7,7 @@ use App\Mail\ActivateMail;
 use App\Mail\DeniedMail;
 use App\Mail\StoppedMail;
 use App\Models\Helper;
+use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -56,6 +57,12 @@ class CMSController extends Controller
         $push = new PushNotificationController();
         $push->sendVerifiedNotif($pushData);
 
+        Notification::create([
+            'user_id' => $user_id,
+            'title' =>'Permintaan Kamu Diterima!',
+            'message' => 'Yeay, Admin telah menerima permintann kamu untuk menjadi helper'
+        ]);
+
         return redirect('/cms/helper');
     }
 
@@ -77,6 +84,12 @@ class CMSController extends Controller
 
         $push = new PushNotificationController();
         $push->sendVerifiedNotif($pushData);
+
+        Notification::create([
+            'user_id' => $user_id,
+            'title' =>'Kamu Di Aktivasi!',
+            'message' => 'Wah, Admin mengaktivasi kamu untuk menjadi helper'
+        ]);
 
         $user = User::where('id', $user_id)->first();
 
@@ -104,6 +117,12 @@ class CMSController extends Controller
         $push = new PushNotificationController();
         $push->sendVerifiedNotif($pushData);
 
+        Notification::create([
+            'user_id' => $user_id,
+            'title' =>'Permintaan Kamu Ditolak!',
+            'message' => 'Yah, Sepertinya kamu tidak memenuhi syarat untuk menjadi helper'
+        ]);
+
         $user = User::where('id', $user_id)->first();
 
         Mail::to($email)->send(new DeniedMail($user->full_name));
@@ -129,6 +148,12 @@ class CMSController extends Controller
 
         $push = new PushNotificationController();
         $push->sendVerifiedNotif($pushData);
+
+        Notification::create([
+            'user_id' => $user_id,
+            'title' =>'Status Helper Kamu Dinonaktifkan Admin!',
+            'message' => 'Hmm, Kami memutuskan untuk tidak melanjutkan kamu sebagai helper di aplikasi ini'
+        ]);
 
         $user = User::where('id', $user_id)->first();
 

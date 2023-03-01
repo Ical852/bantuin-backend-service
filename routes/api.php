@@ -1,8 +1,9 @@
 <?php
 
+use App\Http\Controllers\BantuanController;
+use App\Http\Controllers\BantuanOrderController;
 use App\Http\Controllers\HelperController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,6 +30,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('helper/update', [HelperController::class, 'update']);
     Route::post('helper/rate', [HelperController::class, 'rateHelper']);
     Route::get('helper/rate', [HelperController::class, 'getAllRate']);
+
+    Route::post('bantuan', [BantuanController::class, 'create']);
+    Route::get('bantuan', [BantuanController::class, 'get']);
+    Route::post('bantuan/update', [BantuanController::class, 'update']);
+    Route::delete('bantuan', [BantuanController::class, 'delete']);
+    
+    Route::get('category', [BantuanController::class, 'category']);
+
+    Route::post('order', [BantuanOrderController::class, 'create']);
 });
 
 Route::post('device', [UserController::class, 'storeUserDeviceId']);

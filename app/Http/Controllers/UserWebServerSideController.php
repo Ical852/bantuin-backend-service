@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notification;
 use App\Models\User;
 use App\Models\UserDevice;
 use App\Models\UserEmailToken;
@@ -69,6 +70,12 @@ class UserWebServerSideController extends Controller
 
             $push = new PushNotificationController();
             $push->sendVerifiedNotif($pushData);
+
+            Notification::create([
+                'user_id' => $user->id,
+                'title' =>'Yeay Berhasil Verifikasi',
+                'message' => 'Akun Kamu Telah Terverifikasi, Sekarang Kamu Bisa Menggunakan Aplikasi'
+            ]);
 
             return $this->verifSuccess();
         } else {

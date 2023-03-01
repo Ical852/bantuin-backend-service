@@ -6,6 +6,7 @@ use App\Helpers\ResponseFormatter;
 use App\Models\Bantuan;
 use App\Models\Helper;
 use App\Models\HelperRating;
+use App\Models\Notification;
 use App\Models\User;
 use App\Models\UserDevice;
 use Exception;
@@ -53,6 +54,12 @@ class HelperController extends Controller
 
             $push = new PushNotificationController();
             $push->sendVerifiedNotif($pushData);
+
+            Notification::create([
+                'user_id' => $user->id,
+                'title' =>'Permintaan Berhasil Terkirim',
+                'message' => 'Permintaan kamu untuk menjadi helper telah berhasil terkirim'
+            ]);
 
             return ResponseFormatter::success([
                 'user' => $user,

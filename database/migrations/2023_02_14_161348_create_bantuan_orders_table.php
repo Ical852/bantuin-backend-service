@@ -19,7 +19,7 @@ class CreateBantuanOrdersTable extends Migration
             $table->foreignId('bantuan_id');
             $table->foreignId('helper_id');
             $table->string('status');
-            $table->string('reason');
+            $table->string('reason')->nullable();
             $table->timestamps();
         });
     }

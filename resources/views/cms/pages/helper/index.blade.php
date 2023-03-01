@@ -53,7 +53,7 @@
                                                                 class='form-inline'>
                                                                 @csrf
                                                                 <input type="hidden" name="id" id="id"
-                                                                    value="{{ $item->id }}">
+                                                                    value="{{ $item->user->id }}">
                                                                 <input type="hidden" name="email" id="email"
                                                                     value="{{ $item->user->email }}">
                                                                 <input type="hidden" name="device" id="device"
@@ -65,7 +65,7 @@
                                                                 class='form-inline ml-1'>
                                                                 @csrf
                                                                 <input type="hidden" name="id" id="id"
-                                                                    value="{{ $item->id }}">
+                                                                    value="{{ $item->user->id }}">
                                                                 <input type="hidden" name="email" id="email"
                                                                     value="{{ $item->user->email }}">
                                                                 <input type="hidden" name="device" id="device"
@@ -79,7 +79,7 @@
                                                             class='form-inline'>
                                                             @csrf
                                                             <input type="hidden" name="id" id="id"
-                                                                value="{{ $item->id }}">
+                                                                value="{{ $item->user->id }}">
                                                             <input type="hidden" name="email" id="email"
                                                                 value="{{ $item->user->email }}">
                                                             <input type="hidden" name="device" id="device"
@@ -91,7 +91,7 @@
                                                         <form action="/cms/helper/stop" method="post">
                                                             @csrf
                                                             <input type="hidden" name="id" id="id"
-                                                                value="{{ $item->id }}">
+                                                                value="{{ $item->user->id }}">
                                                             <input type="hidden" name="email" id="email"
                                                                 value="{{ $item->user->email }}">
                                                             <input type="hidden" name="device" id="device"
