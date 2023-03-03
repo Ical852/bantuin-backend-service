@@ -149,6 +149,7 @@ class HelperController extends Controller
                 'bantuan_id' => ['required'],
                 'helper_id' => ['required'],
                 'rating' => ['required'],
+                'message' => ['required'],
             ]);
 
             if ($validator->fails()) {
@@ -190,6 +191,7 @@ class HelperController extends Controller
                 'bantuan_id' => $request->bantuan_id,
                 'helper_id' => $request->helper_id,
                 'rating' => $request->rating,
+                'message' => $request->message,
             ]);
 
             $rate = HelperRating::where('id', $rate->id)->with(['user', 'bantuan', 'helper.user.user_device'])->first();

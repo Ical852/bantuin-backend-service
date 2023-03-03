@@ -15,13 +15,13 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id');
+            $table->string('order_id');
             $table->integer('gross_amount');
             $table->string('payment_url');
             $table->string('transaction_type');
             $table->string('payment_method');
             $table->foreignId('user_id');
-            $table->foreignId('bantuan_id');
+            $table->foreignId('bantuan_id')->nullable();
             $table->string('status');
             $table->timestamps();
         });

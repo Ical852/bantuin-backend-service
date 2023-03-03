@@ -26,4 +26,9 @@ class Bantuan extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function bantuan_order()
+    {
+        return $this->belongsTo(BantuanOrder::class);
+    }
 }

@@ -19,6 +19,7 @@ class CreateHelperRatingsTable extends Migration
             $table->foreignId('bantuan_id');
             $table->foreignId('helper_id');
             $table->integer('rating');
+            $table->string('message');
             $table->timestamps();
         });
     }

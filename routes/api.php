@@ -3,6 +3,7 @@
 use App\Http\Controllers\BantuanController;
 use App\Http\Controllers\BantuanOrderController;
 use App\Http\Controllers\HelperController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -38,7 +39,15 @@ Route::middleware('auth:sanctum')->group(function () {
     
     Route::get('category', [BantuanController::class, 'category']);
 
+    Route::get('order', [BantuanOrderController::class, 'get']);
     Route::post('order', [BantuanOrderController::class, 'create']);
+    Route::post('order/accept', [BantuanOrderController::class, 'accept']);
+    Route::post('order/deny', [BantuanOrderController::class, 'deny']);
+    Route::post('order/cancel', [BantuanOrderController::class, 'cancel']);
+    Route::post('order/done', [BantuanOrderController::class, 'done']);
+
+    Route::post('transaction', [TransactionController::class, 'create']);
+    Route::get('transaction', [TransactionController::class, 'get']);
 });
 
 Route::post('device', [UserController::class, 'storeUserDeviceId']);
