@@ -175,6 +175,12 @@ class TransactionController extends Controller
             if ($id) {
                 $transaction = Transaction::where('id', $id)->first();
 
+                if (!$transaction) {
+                    return ResponseFormatter::error([
+                        'message' => 'Transaction Not Found',
+                    ], 'Get Transaction Failed', 500);
+                }
+
                 return ResponseFormatter::success([
                     'transaction' => $transaction
                 ], 'Transaction Success');

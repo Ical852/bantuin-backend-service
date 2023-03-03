@@ -2,7 +2,10 @@
 
 use App\Http\Controllers\BantuanController;
 use App\Http\Controllers\BantuanOrderController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\HelperController;
+use App\Http\Controllers\HistorySearchController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -48,6 +51,18 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('transaction', [TransactionController::class, 'create']);
     Route::get('transaction', [TransactionController::class, 'get']);
+
+    Route::post('notification', [NotificationController::class, 'create']);
+    Route::delete('notification', [NotificationController::class, 'delete']);
+    Route::get('notification', [NotificationController::class, 'get']);
+
+    Route::post('search', [HistorySearchController::class, 'create']);
+    Route::delete('search', [HistorySearchController::class, 'delete']);
+    Route::get('search', [HistorySearchController::class, 'get']);
+
+    Route::post('chat', [ChatController::class, 'create']);
+    Route::delete('chat', [ChatController::class, 'delete']);
+    Route::get('chat', [ChatController::class, 'get']);
 });
 
 Route::post('device', [UserController::class, 'storeUserDeviceId']);
