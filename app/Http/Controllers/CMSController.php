@@ -166,4 +166,30 @@ class CMSController extends Controller
     {
         return view('cms.pages.bantuin.index');
     }
+
+    public function notif()
+    {
+        return view('cms.pages.notif.index', [
+            'notif' => Notification::all()
+        ]);
+    }
+
+    public function createNotif(Request $request)
+    {
+        Notification::create([
+            'user_id' => $request->user_id,
+            'title' => $request->title,
+            'message' => $request->message,
+        ]);
+
+        return redirect('cms/notif');
+    }
+
+    public function deleteNotif($id)
+    {
+        Notification::where('id', $id)->delete();
+
+        return redirect('cms/notif');
+    }
+
 }

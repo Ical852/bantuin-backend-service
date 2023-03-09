@@ -28,6 +28,12 @@
                         <p>Bantuan</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="/cms/notif" class="nav-link {{ Request::is('cms/notif') ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Notification</p>
+                    </a>
+                </li>
             </ul>
         </li>
     </ul>
