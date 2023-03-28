@@ -19,7 +19,7 @@ class Bantuan extends Model
 
     public function bantuan_category()
     {
-        return $this->hasOne(BantuanCategory::class);
+        return $this->hasOne(BantuanCategory::class, 'id', 'category_id');
     }
 
     public function user()

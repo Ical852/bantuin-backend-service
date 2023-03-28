@@ -20,4 +20,9 @@ class Helper extends Model
     {
         return $this->hasMany(HelperRating::class);
     }
+
+    public function bantuan_order()
+    {
+        return $this->belongsTo(BantuanOrder::class);
+    }
 }

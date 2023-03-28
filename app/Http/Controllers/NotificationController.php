@@ -115,7 +115,7 @@ class NotificationController extends Controller
             $notification = Notification::where('user_id', Auth::user()->id)->get();
 
             return ResponseFormatter::success([
-                'notification' => $notification
+                'notifications' => $notification
             ], 'Get Notification Success');
         } catch (Exception $error) {
             return ResponseFormatter::error([

@@ -15,4 +15,14 @@ class BantuanOrder extends Model
     {
         return $this->hasOne(Bantuan::class, 'id', 'bantuan_id');
     }
+
+    public function helper()
+    {
+        return $this->hasOne(Helper::class, 'id', 'helper_id');
+    }
+
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
 }

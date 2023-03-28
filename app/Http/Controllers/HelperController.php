@@ -103,10 +103,10 @@ class HelperController extends Controller
         }
     }
 
-    public function fetch()
+    public function fetch(Request $request)
     {
         try {
-            $helper = Helper::where('user_id', Auth::user()->id)->first();
+            $helper = Helper::where('id', $request->helper_id)->first();
 
             if (!$helper) {
                 return ResponseFormatter::error([
@@ -114,7 +114,7 @@ class HelperController extends Controller
                 ], 'Fetch Helper Data Failed', 500);
             }
 
-            $user = User::where('id', Auth::user()->id)->with(['helper.helper_rating', 'user_device'])->first();
+            $user = User::where('id', $request->helper_id)->with(['helper.helper_rating', 'user_device'])->first();
 
             return ResponseFormatter::success([
                 'user' => $user,
@@ -207,10 +207,10 @@ class HelperController extends Controller
         }
     }
 
-    public function getAllRate()
+    public function getAllRate(Request $request)
     {
         try {
-            $helper = Helper::where('user_id', Auth::user()->id)->first();
+            $helper = Helper::where('id', $request->helper_id)->first();
 
             if (!$helper) {
                 return ResponseFormatter::error([
@@ -218,7 +218,7 @@ class HelperController extends Controller
                 ], 'Get All Helper Rate Failed', 500);
             }
 
-            $rate = HelperRating::where('helper_id', $helper->id)->with(['user', 'bantuan', 'helper.user.user_device'])->get();
+            $rate = HelperRating::where('helper_id', $helper->id)->with(['user', 'bantuan', 'helper.user'])->get();
 
             return ResponseFormatter::success([
                 'rate' => $rate,

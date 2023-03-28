@@ -485,6 +485,11 @@ class BantuanOrderController extends Controller
             $order->reason = null;
             $order->update();
 
+            if ($bantuan->pay_type != 'cash') {
+                $helper->helper_balance = $helper->helper_balance + $bantuan->price;
+                $helper->update();
+            }
+
             $pushToRequester = [
                 'title' => 'Yeayy!, Bantuan Kamu Telah Selesai',
                 'body' => 'Selamat, Bantuan Kamu ke ' . $owner->full_name . ' untuk ' . $bantuan->title . ' telah selesai, silakan terima uang kamu',
@@ -538,7 +543,7 @@ class BantuanOrderController extends Controller
 
             if ($helper_id) {
 
-                $order = BantuanOrder::query()->with(['bantuan']);
+                $order = BantuanOrder::query()->with(['helper.user.user_device', 'bantuan.bantuan_category', 'bantuan.user.user_device']);
                 
                 if ($status) {
                     $order->where('status', $status);
@@ -555,7 +560,7 @@ class BantuanOrderController extends Controller
 
             if ($user_id) {
 
-                $order = BantuanOrder::query()->with(['bantuan']);
+                $order = BantuanOrder::query()->with(['helper.user.user_device', 'bantuan.bantuan_category', 'bantuan.user.user_device']);
                 
                 if ($status) {
                     $order->where('status', $status);
@@ -572,7 +577,7 @@ class BantuanOrderController extends Controller
 
             if ($bantuan_id) {
 
-                $order = BantuanOrder::query()->with(['bantuan']);
+                $order = BantuanOrder::query()->with(['helper.user.user_device', 'bantuan.bantuan_category', 'bantuan.user.user_device']);
                 
                 if ($status) {
                     $order->where('status', $status);
@@ -587,7 +592,7 @@ class BantuanOrderController extends Controller
                 }
             }
 
-            $order = BantuanOrder::query()->with(['bantuan']);
+            $order = BantuanOrder::query()->with(['helper.user.user_device', 'bantuan.bantuan_category', 'bantuan.user.user_device']);
 
             if ($status) {
                 $order->where('status', $status);

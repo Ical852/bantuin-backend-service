@@ -80,7 +80,7 @@ class HistorySearchController extends Controller
                 ], 'Get Search History Failed', 500);
             }
 
-            $search = SearchHistory::where('user_id', Auth::user()->id)->get();
+            $search = SearchHistory::where('user_id', Auth::user()->id)->take(5)->get();
 
             return ResponseFormatter::success([
                 'search' => $search

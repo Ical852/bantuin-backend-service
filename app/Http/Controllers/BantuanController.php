@@ -155,7 +155,7 @@ class BantuanController extends Controller
             $date = $request->date;
 
             if ($id) {
-                $bantuan = Bantuan::find($id);
+                $bantuan = Bantuan::find($id)->with(['bantuan_category', 'user.user_device', 'user.helper'])->first();
 
                 if ($bantuan) {
                     return ResponseFormatter::success($bantuan, "Success Get Bantuan Data");
@@ -165,7 +165,7 @@ class BantuanController extends Controller
             }
 
             if ($category_id) {
-                $bantuan = Bantuan::where('category_id', $category_id)->get();
+                $bantuan = Bantuan::where('category_id', $category_id)->with(['bantuan_category', 'user.user_device', 'user.helper'])->get();
 
                 if ($bantuan) {
                     return ResponseFormatter::success($bantuan, "Success Get Bantuan Data");
@@ -175,7 +175,7 @@ class BantuanController extends Controller
             }
 
             if ($user_id) {
-                $bantuan = Bantuan::where('user_id', $user_id)->get();
+                $bantuan = Bantuan::where('user_id', $user_id)->with(['bantuan_category', 'user.user_device', 'user.helper'])->get();
 
                 if ($bantuan) {
                     return ResponseFormatter::success($bantuan, "Success Get Bantuan Data");
@@ -185,6 +185,7 @@ class BantuanController extends Controller
             }
 
             $bantuan = Bantuan::query();
+            $bantuan->where('status', 'active')->with(['bantuan_category', 'user.user_device', 'user.helper']);
 
             $bantuan->where('user_id', '!=', Auth::user()->id);
 
@@ -209,11 +210,11 @@ class BantuanController extends Controller
             }
 
             if ($desc) {
-                $bantuan->where('desc', 'like', '%'.$desc.'%');
+                $bantuan->orWhere('desc', 'like', '%'.$desc.'%');
             }
 
             if ($location) {
-                $bantuan->where('location', 'like', '%'.$location.'%');
+                $bantuan->orWhere('location', 'like', '%'.$location.'%');
             }
 
             return ResponseFormatter::success(

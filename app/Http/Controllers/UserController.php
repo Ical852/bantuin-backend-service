@@ -66,9 +66,9 @@ class UserController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'full_name' => ['required', 'string', 'max:255'],
-                'username' => ['required', 'string', 'max:255'],
-                'phone_number' => ['required', 'string', 'max:255'],
+                'full_name' => ['required', 'string', 'max:255', 'min:3'],
+                'username' => ['required', 'string', 'max:255', 'min:3'],
+                'phone_number' => ['required', 'string', 'max:255', 'min:10'],
                 'email' => ['required', 'string', 'email', 'max:255'],
                 'password' =>  ['required', 'min:8']
             ]);
@@ -81,8 +81,8 @@ class UserController extends Controller
             if ($checkuser) {
                 return ResponseFormatter::error([
                     'message' => 'Something Went Wrong',
-                    'error' => 'Email is Already Taken'
-                ], 'Register Failed', 500);
+                    'error' => 'Email is Already Taken!'
+                ], 'Sign Up Failed', 500);
             }
 
             $user = User::create([
@@ -247,6 +247,7 @@ class UserController extends Controller
 
             $user_email_token = [
                 'user_id' => $user->id,
+                'email' => $user->email,
                 'token_type' => 'resetpw',
                 'token' => base64_encode(random_bytes(64)),
             ];
