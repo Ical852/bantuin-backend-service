@@ -536,10 +536,27 @@ class BantuanOrderController extends Controller
     public function get(Request $request)
     {
         try {
+            $id = $request->id;
             $helper_id = $request->helper_id;
             $user_id = $request->user_id;
             $bantuan_id = $request->bantuan_id;
             $status = $request->status;
+
+            if ($id) {
+                $order = BantuanOrder::query()->with(['helper.user.user_device', 'bantuan.bantuan_category', 'bantuan.user.user_device']);
+                
+                if ($status) {
+                    $order->where('status', $status);
+                }
+
+                $order->where('id', $id);
+
+                if ($order) {
+                    return ResponseFormatter::success($order->first(), "Success Get Bantuan Order Data");
+                } else {
+                    return ResponseFormatter::error(null, "Bantuan Order Data Not Found", 404);
+                }
+            }
 
             if ($helper_id) {
 

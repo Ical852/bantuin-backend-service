@@ -155,7 +155,7 @@ class BantuanController extends Controller
             $date = $request->date;
 
             if ($id) {
-                $bantuan = Bantuan::find($id)->with(['bantuan_category', 'user.user_device', 'user.helper'])->first();
+                $bantuan = Bantuan::where('id', $id)->with(['bantuan_category', 'user.user_device', 'user.helper'])->first();
 
                 if ($bantuan) {
                     return ResponseFormatter::success($bantuan, "Success Get Bantuan Data");
