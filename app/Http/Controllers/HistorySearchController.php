@@ -47,20 +47,36 @@ class HistorySearchController extends Controller
         }
     }
 
-    public function delete()
+    public function delete(Request $request)
     {
         try {
             $user = User::where('id', Auth::user()->id)->first();
-
+            
             if (!$user) {
                 return ResponseFormatter::error([
                     'message' => 'User Not Found',
                 ], 'Delete Search History Failed', 500);
             }
 
-            SearchHistory::where('user_id', Auth::user()->id)->delete();
+            $id = $request->id;
 
-            return ResponseFormatter::success(null, 'Delete Search History Success');
+            if ($id) {
+                $search = SearchHistory::where('id', $id)->first();
+
+                if (!$search) {
+                    return ResponseFormatter::error([
+                        'message' => 'Search History Not Found',
+                    ], 'Delete Single Search History Failed', 500);
+                }
+
+                $search->delete();
+
+                return ResponseFormatter::success(null, 'Delete Single Search History Success');
+            } else {
+                SearchHistory::where('user_id', Auth::user()->id)->delete();
+    
+                return ResponseFormatter::success(null, 'Delete Search History Success');
+            }
         } catch (Exception $error) {
             return ResponseFormatter::error([
                 'message' => 'Something went wrong',
