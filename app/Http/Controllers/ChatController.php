@@ -105,14 +105,14 @@ class ChatController extends Controller
             $helper_id = $request->helper_id;
 
             if ($helper_id) {
-                $chats = Chat::where('helper_id', $helper_id)->get();
+                $chats = Chat::where('helper_id', $helper_id)->with(['user.user_device', 'helper.user.user_device'])->get();
 
                 return ResponseFormatter::success([
                     'chat' => $chats
                 ], 'Get Chat Success');
             }
 
-            $chats = Chat::where('user_id', Auth::user()->id)->get();
+            $chats = Chat::where('user_id', Auth::user()->id)->with(['user.user_device', 'helper.user.user_device'])->get();
 
             return ResponseFormatter::success([
                 'chat' => $chats
