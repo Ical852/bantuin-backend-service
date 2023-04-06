@@ -49,7 +49,8 @@ class HelperController extends Controller
                 'body' => 'Permintaan kamu untuk menjadi helper telah berhasil terkirim',
                 'icon' => '',
                 'url' => 'url',
-                'device' => $userDevices->device_id
+                'device' => $userDevices->device_id,
+                'chat' => 'no',
             ];
 
             $push = new PushNotificationController();

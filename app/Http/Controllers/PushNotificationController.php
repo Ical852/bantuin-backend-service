@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class PushNotificationController extends Controller
 {
-    public function push($title, $body, $icon, $url, $to)
+    public function push($title, $body, $icon, $url, $to, $chat, $userId)
     {
         $postdata = json_encode(
             [
@@ -18,7 +18,11 @@ class PushNotificationController extends Controller
                         'click_action' => $url
                     ]
                 ,
-                'to' => $to
+                'to' => $to,
+                'data' => [
+                    'chat' => $chat,
+                    'userid' => $userId
+                ]
             ]
         );
 
@@ -43,12 +47,15 @@ class PushNotificationController extends Controller
 
     public function sendVerifiedNotif($pushData)
     {
+        $userId = $pushData['userid'] ?? 0;
         $this->push(
             $pushData['title'], 
             $pushData['body'], 
             $pushData['icon'], 
             $pushData['url'], 
-            $pushData['device']
+            $pushData['device'],
+            $pushData['chat'],
+            $userId
         );
     }
 }

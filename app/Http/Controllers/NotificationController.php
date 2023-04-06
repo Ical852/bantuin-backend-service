@@ -38,7 +38,8 @@ class NotificationController extends Controller
                 'body' => $request->message,
                 'icon' => '',
                 'url' => 'url',
-                'device' => $user->user_device->device_id
+                'device' => $user->user_device->device_id,
+                'chat' => 'no',
             ];
 
             $push = new PushNotificationController();
@@ -123,5 +124,22 @@ class NotificationController extends Controller
                 'error' => $error
             ], 'Get Notification Failed', 500);
         }
+    }
+
+    public function push(Request $request)
+    {
+        $pushData = [
+            'title' => $request->title,
+            'body' => $request->body,
+            'icon' => '',
+            'url' => 'url',
+            'device' => $request->device_id,
+            'chat' => 'yes',
+            'userid' => $request->user_id
+        ];
+        $push = new PushNotificationController();
+        $push->sendVerifiedNotif($pushData);
+
+        return true;
     }
 }

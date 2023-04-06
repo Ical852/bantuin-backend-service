@@ -47,7 +47,8 @@ class CMSController extends Controller
             'body' => 'Yeay, Admin telah menerima permintann kamu untuk menjadi helper',
             'icon' => '',
             'url' => 'url',
-            'device' => $device
+            'device' => $device,
+            'chat' => 'no',
         ];
 
         $user = User::where('id', $user_id)->first();
@@ -79,7 +80,8 @@ class CMSController extends Controller
             'body' => 'Wah, Admin mengaktivasi kamu untuk menjadi helper',
             'icon' => '',
             'url' => 'url',
-            'device' => $device
+            'device' => $device,
+            'chat' => 'no',
         ];
 
         $push = new PushNotificationController();
@@ -111,7 +113,8 @@ class CMSController extends Controller
             'body' => 'Yah, Sepertinya kamu tidak memenuhi syarat untuk menjadi helper',
             'icon' => '',
             'url' => 'url',
-            'device' => $device
+            'device' => $device,
+            'chat' => 'no',
         ];
 
         $push = new PushNotificationController();
@@ -143,7 +146,8 @@ class CMSController extends Controller
             'body' => 'Hmm, Kami memutuskan untuk tidak melanjutkan kamu sebagai helper di aplikasi ini',
             'icon' => '',
             'url' => 'url',
-            'device' => $device
+            'device' => $device,
+            'chat' => 'no',
         ];
 
         $push = new PushNotificationController();

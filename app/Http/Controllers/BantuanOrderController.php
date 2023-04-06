@@ -96,7 +96,8 @@ class BantuanOrderController extends Controller
                 'body' => $requester->full_name . ' ingin membantu kamu untuk ' . $bantuan->title,
                 'icon' => '',
                 'url' => 'url',
-                'device' => $owner->user_device->device_id
+                'device' => $owner->user_device->device_id,
+                'chat' => 'no',
             ];
 
             $pushToRequester = [
@@ -104,7 +105,8 @@ class BantuanOrderController extends Controller
                 'body' => 'Request bantuan kamu untuk ' . $owner->full_name . ' berhasil terkirim',
                 'icon' => '',
                 'url' => 'url',
-                'device' => $requester->user_device->device_id
+                'device' => $requester->user_device->device_id,
+                'chat' => 'no',
             ];
 
             $push = new PushNotificationController();
@@ -214,7 +216,8 @@ class BantuanOrderController extends Controller
                 'body' => 'Request bantuan kamu kepada ' . $owner->full_name . ' untuk ' . $bantuan->title . ' telah diterima',
                 'icon' => '',
                 'url' => 'url',
-                'device' => $requester->user_device->device_id
+                'device' => $requester->user_device->device_id,
+                'chat' => 'no',
             ];
 
             $push = new PushNotificationController();
@@ -316,7 +319,8 @@ class BantuanOrderController extends Controller
                 'body' => 'Mohon Maaf, Request bantuan kamu kepada ' . $owner->full_name . ' untuk ' . $bantuan->title . ' telah ditolak',
                 'icon' => '',
                 'url' => 'url',
-                'device' => $requester->user_device->device_id
+                'device' => $requester->user_device->device_id,
+                'chat' => 'no',
             ];
 
             $push = new PushNotificationController();
@@ -396,7 +400,8 @@ class BantuanOrderController extends Controller
                 'body' => 'Mohon Maaf, Request bantuan kamu telah dibatalkan oleh ' . $owner->full_name . ' karena ' . $request->reason,
                 'icon' => '',
                 'url' => 'url',
-                'device' => $requester->user_device->device_id
+                'device' => $requester->user_device->device_id,
+                'chat' => 'no',
             ];
 
             $pushToOwner = [
@@ -404,7 +409,8 @@ class BantuanOrderController extends Controller
                 'body' => 'Bantuan dari ' . $requester->full_name . ' untuk ' . $bantuan->title . ' telah dibatalkan karena ' . $request->reason,
                 'icon' => '',
                 'url' => 'url',
-                'device' => $owner->user_device->device_id
+                'device' => $owner->user_device->device_id,
+                'chat' => 'no',
             ];
 
             $push = new PushNotificationController();
@@ -495,7 +501,8 @@ class BantuanOrderController extends Controller
                 'body' => 'Selamat, Bantuan Kamu ke ' . $owner->full_name . ' untuk ' . $bantuan->title . ' telah selesai, silakan terima uang kamu',
                 'icon' => '',
                 'url' => 'url',
-                'device' => $requester->user_device->device_id
+                'device' => $requester->user_device->device_id,
+                'chat' => 'no',
             ];
 
             $pushToOwner = [
@@ -503,7 +510,8 @@ class BantuanOrderController extends Controller
                 'body' => 'Horeee, selamat, bantuan kamu telah selesai dibantu oleh ' . $requester->full_name . ', Selesaikan pembayaran kamu jika belum selesai',
                 'icon' => '',
                 'url' => 'url',
-                'device' => $owner->user_device->device_id
+                'device' => $owner->user_device->device_id,
+                'chat' => 'no',
             ];
 
             $push = new PushNotificationController();

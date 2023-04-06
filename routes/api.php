@@ -63,6 +63,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('chat', [ChatController::class, 'create']);
     Route::delete('chat', [ChatController::class, 'delete']);
     Route::get('chat', [ChatController::class, 'get']);
+
+    Route::post('notif/push', [NotificationController::class, 'push']);
 });
 
 Route::post('device', [UserController::class, 'storeUserDeviceId']);

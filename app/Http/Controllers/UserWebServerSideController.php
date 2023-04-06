@@ -65,7 +65,8 @@ class UserWebServerSideController extends Controller
                 'body' => 'Akun Kamu Telah Terverifikasi, Sekarang Kamu Bisa Menggunakan Aplikasi',
                 'icon' => '',
                 'url' => 'url',
-                'device' => $userDevices->device_id
+                'device' => $userDevices->device_id,
+                'chat' => 'no',
             ];
 
             $push = new PushNotificationController();
